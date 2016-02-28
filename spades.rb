@@ -4,13 +4,14 @@ class Spades < Formula
   # tag "bioinformatics"
   # doi "10.1089/cmb.2012.0021"
   url "http://spades.bioinf.spbau.ru/release3.7.0/SPAdes-3.7.0.tar.gz"
-  sha256 "f07377f148d13060e01747405eef90ee8dc8749ca4a772ec0828c4c654fbcbf7"
+  sha256 "4d9b114150c4d37084967a5a3264d36a480394996197949fb72402f2d65b42a3"
 
   bottle do
     cellar :any
-    sha256 "3fd5d0754a3d84c3a99af59424715336d9fcbad4f229d6c8f70319c560a0ee8f" => :el_capitan
-    sha256 "fdc450b6256f2e28afc79e6b7d3330d657ae5759626674339b650abe89d691d5" => :yosemite
-    sha256 "7826fa02909ef6373bab4d4181ab0af0a9668d94d39e59cf15ae11e5f7ee9931" => :mavericks
+    revision 1
+    sha256 "fc88b243e7ef3cdc9c73cc2cbb0620da8a7f90856ca57e551cafd5cd75a15d42" => :el_capitan
+    sha256 "db922b27bda8afe1b992d47de34f96900ccc29efac8e91c9359ca5776bc7f21e" => :yosemite
+    sha256 "12f2f2f6b50d9f142a76fa61a981952601e969dfc7e6ff27cbb1403d3a44682f" => :mavericks
   end
 
   depends_on "cmake" => :build

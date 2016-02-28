@@ -4,14 +4,16 @@ class Trilinos < Formula
   url "https://trilinos.org/oldsite/download/files/trilinos-12.4.2-Source.tar.bz2"
   sha256 "78225d650ddcfc453b40cddb99b2fbb79998ff6359f9090154727b916812a58e"
   head "https://software.sandia.gov/trilinos/repositories/publicTrilinos", :using => :git
+  revision 1
 
   bottle do
-    sha256 "cb3ca115bdb54c7f760ea0569aae7172db10ef8a4f5b7648b1c98c92a887055f" => :el_capitan
-    sha256 "cdb15c6509cbe130642ea4a0cbaa5946cd8ce9ee574fad066e270e04de162552" => :yosemite
-    sha256 "ac9649f7cdae07d93f83a12a0e8dc0de788b62b01291fe372dfc1a1692304413" => :mavericks
+    sha256 "0554e7d736a812a1ca0b9c297f2c3f8165bf8fdc0fab2498e3eb68ddee7533c9" => :el_capitan
+    sha256 "fcb53f788debe09f8c062eaf64848dc42b6229c1a73fe8b9db05abc32943eaaf" => :yosemite
+    sha256 "22e06fa0ec1b75fda2fb4ec24d03f31b062bf2edc979c1ec375257f39e5f2c2b" => :mavericks
   end
 
   option "with-check", "Perform build time checks (time consuming and contains failures)"
+  option "without-python", "Build without python2 support"
 
   # options and dependencies not supported in the current version
   # are commented out with #- and failure reasons are documented.
@@ -21,9 +23,8 @@ class Trilinos < Formula
   depends_on :mpi           => [:cc, :cxx, :recommended]
   depends_on :fortran       => :recommended
   depends_on :x11           => :recommended
-
-  depends_on :python        => :recommended
-  depends_on "homebrew/python/numpy"  if build.with? "python"
+  depends_on :python        => :recommended if MacOS.version <= :snow_leopard
+  depends_on "numpy"        => :python if build.with? "python"
   depends_on "swig"         => :build if build.with? "python"
 
   depends_on "cmake"        => :build
@@ -37,12 +38,12 @@ class Trilinos < Formula
   depends_on "adol-c"       => :recommended
   depends_on "boost"        => :recommended
   depends_on "cppunit"      => :recommended
-  depends_on "doxygen"      => ["with-graphviz", :recommended]
+  depends_on "doxygen"      => ["with-graphviz", :optional]
   depends_on "hwloc"        => :recommended
   depends_on "libmatio"     => [:recommended] + ((build.with? "hdf5") ? ["with-hdf5"] : [])
   depends_on "metis"        => :recommended
   depends_on "mumps"        => [:recommended] + openblasdep
-  depends_on "netcdf"       => ["with-fortran", :recommended]
+  depends_on "netcdf"       => ["with-fortran", :optional]
   depends_on "parmetis"     => :recommended if build.with? "mpi"
   depends_on "scalapack"    => [:recommended] + openblasdep
   depends_on "scotch"       => :recommended
@@ -58,7 +59,7 @@ class Trilinos < Formula
   depends_on "eigen"        => :recommended
   depends_on "hypre"        => [:recommended] + ((build.with? "mpi") ? [] : ["without-mpi"]) + openblasdep # EpetraExt tests fail to compile
   depends_on "glpk"         => :recommended
-  depends_on "hdf5"         => [:recommended] + mpidep
+  depends_on "hdf5"         => [:optional] + mpidep
   depends_on "tbb"          => :recommended
   depends_on "glm"          => :recommended
   depends_on "yaml-cpp"     => :recommended
@@ -84,6 +85,7 @@ class Trilinos < Formula
 
   # Kokkos, Tpetra and Sacado will be OFF without cxx11
   needs :cxx11
+
   def install
     ENV.cxx11
     # Trilinos supports only Debug or Release CMAKE_BUILD_TYPE!
